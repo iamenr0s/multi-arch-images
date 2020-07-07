@@ -40,7 +40,7 @@ jobs:
             --output "type=image,push=false" \
             --tag enros/docker-ansible-ubuntu2004:latest \
             --tag enros/docker-ansible-ubuntu2004:${{ env.VERSION }} \           
-            --file ./build/docker-ansible-ubuntu2004/Dockerfile \
+            --file ./docker_builds/docker-ansible-ubuntu2004/Dockerfile \
             ./docker_builds/docker-ansible-ubuntu2004/
       -        
         name: Login to GitHub Docker Registry
@@ -58,7 +58,7 @@ jobs:
             --output "type=image,push=true" \
             --tag enros/docker-ansible-ubuntu2004:latest \
             --tag enros/docker-ansible-ubuntu2004:${{ env.VERSION }} \           
-            --file ./build/docker-ansible-ubuntu2004/Dockerfile \
+            --file ./docker_builds/docker-ansible-ubuntu2004/Dockerfile \
             ./docker_builds/docker-ansible-ubuntu2004/
       -
         name: Docker Check Manifest
