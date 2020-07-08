@@ -61,7 +61,7 @@ jobs:
       -
         name: Docker Check Manifest
         run: |
-          docker run --rm enros/docker-ansible-ubuntu2004:latest
+          docker run --rm mplatform/mquery enros/docker-ansible-ubuntu2004:latest
       -
         name: Clear
         if: always()
