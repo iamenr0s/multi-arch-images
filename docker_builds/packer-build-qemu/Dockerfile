@@ -2,7 +2,7 @@ FROM golang:alpine
 
 ENV PACKER_DEV=1
 
-RUN apk add --update git bash openssl qemu qemu-system-`uname -m` qemu-img
+RUN apk add --update git bash openssl qemu qemu-system-`uname -m | sed 's|armv7l|arm|'` qemu-img
 RUN go get github.com/mitchellh/gox
 RUN go get github.com/hashicorp/packer
 
