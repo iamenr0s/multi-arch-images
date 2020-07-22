@@ -11,4 +11,4 @@ WORKDIR $GOPATH/src/github.com/hashicorp/packer
 RUN /bin/bash scripts/build.sh
 
 WORKDIR $GOPATH
-ENTRYPOINT ["bin/packer"]
+#ENTRYPOINT ["bin/packer"]
