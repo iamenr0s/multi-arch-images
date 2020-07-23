@@ -1,14 +1,10 @@
-FROM golang:alpine
+FROM alpine:latest
+MAINTAINER enr0s
 
-ENV PACKER_DEV=1
+ENV PACKER_VERSION=1.6.0
 
-RUN apk add --update git bash openssl qemu qemu-system-`uname -m | sed 's|armv7l|arm|'` qemu-img
-RUN go get github.com/mitchellh/gox
-RUN go get github.com/hashicorp/packer
+RUN apk add --update git bash wget openssl qemu qemu-system-`uname -m | sed 's|armv7l|arm|'` qemu-img
+RUN wget -qO- https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_`uname -m | sed 's|armv7l|arm|' | sed 's|x86_64|amd64|' | sed 's|aarch64|arm64|'`.zip | unzip -d /usr/local/bin/ -) && \
+    chmod 755 /usr/local/bin/packer
 
-WORKDIR $GOPATH/src/github.com/hashicorp/packer
-
-RUN /bin/bash scripts/build.sh
-
-WORKDIR $GOPATH
-#ENTRYPOINT ["bin/packer"]
+ENTRYPOINT [ "/usr/local/bin/packer" ]
