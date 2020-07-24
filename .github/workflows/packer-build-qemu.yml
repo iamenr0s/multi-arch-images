@@ -36,7 +36,7 @@ jobs:
           docker buildx build \
             --cache-from "type=local,src=/tmp/.buildx-cache" \
             --cache-to "type=local,dest=/tmp/.buildx-cache" \
-            --platform linux/amd64,linux/arm64 \
+            --platform linux/amd64,linux/arm/v7,linux/arm64 \
             --output "type=image,push=false" \
             --tag enros/packer-build-qemu:latest \
             --file ./docker_builds/packer-build-qemu/Dockerfile \
@@ -53,7 +53,7 @@ jobs:
         run: |
           docker buildx build \
             --cache-from "type=local,src=/tmp/.buildx-cache" \
-            --platform linux/amd64,linux/arm64 \
+            --platform linux/amd64,linux/arm/v7,linux/arm64 \
             --output "type=image,push=true" \
             --tag enros/packer-build-qemu:latest \
             --file ./docker_builds/packer-build-qemu/Dockerfile \
