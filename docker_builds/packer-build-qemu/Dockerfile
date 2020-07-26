@@ -10,6 +10,6 @@ RUN curl -o ./packer.zip  https://releases.hashicorp.com/packer/${PACKER_VERSION
   unzip packer.zip -d /usr/local/bin && \
   rm -f packer.zip
 
-ADD ./docker_builds/packer-build-qemu/startup.sh /
+ADD ./startup.sh /
 
 ENTRYPOINT [ "/startup.sh" ]
