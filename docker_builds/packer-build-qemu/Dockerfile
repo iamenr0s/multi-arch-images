@@ -10,4 +10,4 @@ RUN curl -o ./packer.zip  https://releases.hashicorp.com/packer/${PACKER_VERSION
   unzip packer.zip -d /usr/local/bin && \
   rm -f packer.zip
 
-RUN mknod /dev/kvm c 10 $(grep '\<kvm\>' /proc/misc | cut -f 1 -d' ')
+RUN mknod /dev/kvm c 10 `grep '\<kvm\>' /proc/misc | cut -f 1 -d' '`
