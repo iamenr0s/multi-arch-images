@@ -10,8 +10,3 @@ if [ ! -e /dev/kvm ]; then
   mknod /dev/kvm c 10 $(grep '\<kvm\>' /proc/misc | cut -f 1 -d' ')
   set -e
 fi
-
-# Run packer
-if [ ! -f /usr/local/bin/packer ]; then
-  /usr/local/bin/packer
-fi

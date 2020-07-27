@@ -12,4 +12,4 @@ RUN curl -o ./packer.zip  https://releases.hashicorp.com/packer/${PACKER_VERSION
 
 ADD startup.sh /
 
-#ENTRYPOINT [ "/startup.sh" ]
+ENTRYPOINT [ "/startup.sh" ]
