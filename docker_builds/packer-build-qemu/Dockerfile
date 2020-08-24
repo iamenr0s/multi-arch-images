@@ -11,3 +11,6 @@ RUN curl -o ./packer.zip  https://releases.hashicorp.com/packer/${PACKER_VERSION
   rm -f packer.zip
 
 RUN mknod /dev/kvm c 10 232 
+
+ENTRYPOINT ["/usr/local/bin/packer"]
+
