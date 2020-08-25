@@ -12,5 +12,4 @@ RUN curl -o ./packer.zip  https://releases.hashicorp.com/packer/${PACKER_VERSION
 
 RUN mknod /dev/kvm c 10 232 
 
-ENTRYPOINT ["/usr/local/bin/packer"]
-
+#ENTRYPOINT ["/usr/local/bin/packer"]
