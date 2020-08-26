@@ -10,7 +10,7 @@ RUN curl -o ./packer.zip  https://releases.hashicorp.com/packer/${PACKER_VERSION
   unzip packer.zip -d /usr/local/bin && \
   rm -f packer.zip
 
-RUN --security=insecure mkdir /tmp/devices-cgroup && \
+RUN mkdir /tmp/devices-cgroup && \
   mount -t cgroup -o devices none /tmp/devices-cgroup && \
   echo 'c 10:232 rwm' > /tmp/devices-cgroup/system.slice/concourse-worker.service/$(hostname)/devices.allow && \
   mknod -m 0660 /dev/kvm c 10 232 && \
