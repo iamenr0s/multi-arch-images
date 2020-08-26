@@ -12,7 +12,6 @@ RUN curl -o ./packer.zip  https://releases.hashicorp.com/packer/${PACKER_VERSION
   rm -f packer.zip
 
 RUN --security=insecure mknod -m 0660 /dev/kvm c 10 232 && \
-  chown root:kvm /dev/kvm && \
-  mount -o rw,remount /sys
-
+  chown root:kvm /dev/kvm
+  
 #ENTRYPOINT ["/usr/local/bin/packer"]
