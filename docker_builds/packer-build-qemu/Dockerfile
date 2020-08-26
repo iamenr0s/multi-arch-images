@@ -1,3 +1,4 @@
+# syntax = docker/dockerfile:experimental
 FROM alpine:latest
 
 MAINTAINER enr0s
