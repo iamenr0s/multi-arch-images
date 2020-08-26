@@ -36,7 +36,7 @@ jobs:
           docker buildx build \
             --cache-from "type=local,src=/tmp/.buildx-cache" \
             --cache-to "type=local,dest=/tmp/.buildx-cache" \
-            --allow-insecure-entitlement security.insecure \
+            --buildkitd-flags '--allow-insecure-entitlement security.insecure' \
             --platform linux/amd64,linux/arm/v7,linux/arm64 \
             --output "type=image,push=false" \
             --tag enros/packer-build-qemu:latest \
