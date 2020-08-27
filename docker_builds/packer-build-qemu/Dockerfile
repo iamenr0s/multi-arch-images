@@ -11,6 +11,6 @@ RUN curl -o ./packer.zip  https://releases.hashicorp.com/packer/${PACKER_VERSION
   unzip packer.zip -d /usr/local/bin && \
   rm -f packer.zip
 
-RUN --security=insecure chown root:kvm /dev/kvm
+RUN chown root:kvm /dev/kvm
   
 #ENTRYPOINT ["/usr/local/bin/packer"]
