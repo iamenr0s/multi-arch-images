@@ -14,10 +14,8 @@ jobs:
         java: [ java8, java11 ]
         platform: [ linux/amd64, linux/arm64 ]
         exclude:
-          - graalvm: 20.1.0
-            java: java8
+          - java: java8
             platform: linux/arm64
-
     steps:
       - 
         name: Checkout
