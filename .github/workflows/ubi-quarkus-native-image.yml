@@ -11,11 +11,7 @@ jobs:
     strategy:
       matrix:
         graalvm: [ 20.1.0, 20.2.0 ]
-        java: [ java8, java11 ]
-        platform: [ linux/amd64, linux/arm64 ]
-        exclude:
-          - java: java8
-            platform: linux/arm64
+        java: [ java11 ]
     steps:
       - 
         name: Checkout
@@ -31,16 +27,16 @@ jobs:
         id: cache
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ matrix.graalvm }}-${{ matrix.java }}-${{ matrix.platform }}-${{ github.sha }}
+          key: ${{ runner.os }}-buildx-${{ matrix.graalvm }}-${{ matrix.java }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-buildx-${{ matrix.graalvm }}-${{ matrix.java }}-${{ matrix.platform }}-
+            ${{ runner.os }}-buildx-${{ matrix.graalvm }}-${{ matrix.java }}-
       - 
         name: Docker Buildx (build)
         run: |
           docker buildx build \
             --cache-from "type=local,src=/tmp/.buildx-cache" \
             --cache-to "type=local,dest=/tmp/.buildx-cache" \
-            --platform ${{ matrix.platform }} \
+            --platform linux/amd64,linux/arm64 \
             --build-arg GRAALVM_VERSION=${{ matrix.graalvm }} \
             --build-arg JAVA_VERSION=${{ matrix.java }} \
             --output "type=image,push=false" \
@@ -59,7 +55,7 @@ jobs:
         run: |
           docker buildx build \
             --cache-from "type=local,src=/tmp/.buildx-cache" \
-            --platform ${{ matrix.platform }} \
+            --platform linux/amd64,linux/arm64 \
             --build-arg GRAALVM_VERSION=${{ matrix.graalvm }} \
             --build-arg JAVA_VERSION=${{ matrix.java }} \
             --output "type=image,push=true" \
