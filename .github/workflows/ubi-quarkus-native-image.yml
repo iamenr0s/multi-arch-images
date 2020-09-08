@@ -1,0 +1,72 @@
+name: ubi-quarkus-native-image
+
+on:
+  push:
+    paths:
+      - '.github/workflows/ubi-quarkus-native-image.yml'
+      - 'docker_builds/ubi-quarkus-native-image/**'
+      - '!docker_builds/ubi-quarkus-native-image/*.md'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        graalvm: [ 20.1.0, 20.2.0 ]
+    steps:
+      - 
+        name: Checkout
+        uses: actions/checkout@v2
+      - 
+        name: Set up Docker Buildx
+        uses: crazy-max/ghaction-docker-buildx@v3
+        with:
+          buildx-version: latest
+      -
+        name: Cache Docker layers
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+      - 
+        name: Docker Buildx (build)
+        run: |
+          docker buildx build \
+            --cache-from "type=local,src=/tmp/.buildx-cache" \
+            --cache-to "type=local,dest=/tmp/.buildx-cache" \
+            --platform linux/amd64,linux/arm64 \
+            --build-arg GRAALVM_VERSION=${{ matrix.graalvm }} \
+            --output "type=image,push=false" \
+            --tag enros/ubi-quarkus-native-image:${{ matrix.graalvm }}-java11 \
+            --file ./docker_builds/ubi-quarkus-native-image/Dockerfile \
+            ./docker_builds/ubi-quarkus-native-image/
+      -        
+        name: Login to GitHub Docker Registry
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}        
+        run: |
+          echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+      -  
+        name: Docker Buildx (push)
+        run: |
+          docker buildx build \
+            --cache-from "type=local,src=/tmp/.buildx-cache" \
+            --platform linux/amd64,linux/arm64 \
+            --build-arg GRAALVM_VERSION=${{ matrix.graalvm }} \
+            --output "type=image,push=true" \
+            --tag enros/ubi-quarkus-native-image:${{ matrix.graalvm }}-java11 \
+            --file ./docker_builds/ubi-quarkus-native-image/Dockerfile \
+            ./docker_builds/ubi-quarkus-native-image/
+      -
+        name: Docker Check Manifest
+        run: |
+          docker run --rm mplatform/mquery enros/ubi-quarkus-native-image:${{ matrix.graalvm }}-java11
+      -
+        name: Clear
+        if: always()
+        run: |
+          rm -f ${HOME}/.docker/config.json
