@@ -1,12 +1,10 @@
 name: ubi-quarkus-native-image
-
 on:
   push:
     paths:
       - '.github/workflows/ubi-quarkus-native-image.yml'
       - 'docker_builds/ubi-quarkus-native-image/**'
       - '!docker_builds/ubi-quarkus-native-image/*.md'
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,6 +12,12 @@ jobs:
       matrix:
         graalvm: [ 20.1.0, 20.2.0 ]
         java: [ java8, java11 ]
+        platform: [ linux/amd64, linux/arm64 ]
+        exclude:
+          - graalvm: 20.1.0
+            java: java8
+            platform: linux/arm64
+
     steps:
       - 
         name: Checkout
@@ -29,16 +33,16 @@ jobs:
         id: cache
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ matrix.graalvm }}-${{ matrix.java }}-${{ github.sha }}
+          key: ${{ runner.os }}-buildx-${{ matrix.graalvm }}-${{ matrix.java }}-${{ matrix.platform }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-buildx-${{ matrix.graalvm }}-${{ matrix.java }}-
+            ${{ runner.os }}-buildx-${{ matrix.graalvm }}-${{ matrix.java }}-${{ matrix.platform }}-
       - 
         name: Docker Buildx (build)
         run: |
           docker buildx build \
             --cache-from "type=local,src=/tmp/.buildx-cache" \
             --cache-to "type=local,dest=/tmp/.buildx-cache" \
-            --platform linux/amd64,linux/arm64 \
+            --platform ${{ matrix.platform }} \
             --build-arg GRAALVM_VERSION=${{ matrix.graalvm }} \
             --build-arg JAVA_VERSION=${{ matrix.java }} \
             --output "type=image,push=false" \
@@ -57,7 +61,7 @@ jobs:
         run: |
           docker buildx build \
             --cache-from "type=local,src=/tmp/.buildx-cache" \
-            --platform linux/amd64,linux/arm64 \
+            --platform ${{ matrix.platform }} \
             --build-arg GRAALVM_VERSION=${{ matrix.graalvm }} \
             --build-arg JAVA_VERSION=${{ matrix.java }} \
             --output "type=image,push=true" \
