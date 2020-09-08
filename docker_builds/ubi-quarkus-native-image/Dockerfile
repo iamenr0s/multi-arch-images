@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/ubi-minimal:8.0
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.2
 
 ENV LANG "en_US.UTF-8"
 ENV LANGUAGE "en_US:en"
