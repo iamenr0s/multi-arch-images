@@ -13,6 +13,7 @@ jobs:
     strategy:
       matrix:
         graalvm: [ 20.1.0, 20.2.0 ]
+        java: [ java8, java11 ]
     steps:
       - 
         name: Checkout
@@ -28,9 +29,9 @@ jobs:
         id: cache
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ matrix.graalvm }}-${{ github.sha }}
+          key: ${{ runner.os }}-buildx-${{ matrix.graalvm }}-${{ matrix.java }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-buildx-${{ matrix.graalvm }}-
+            ${{ runner.os }}-buildx-${{ matrix.graalvm }}-${{ matrix.java }}-
       - 
         name: Docker Buildx (build)
         run: |
@@ -39,8 +40,9 @@ jobs:
             --cache-to "type=local,dest=/tmp/.buildx-cache" \
             --platform linux/amd64,linux/arm64 \
             --build-arg GRAALVM_VERSION=${{ matrix.graalvm }} \
+            --build-arg JAVA_VERSION=${{ matrix.java }} \           
             --output "type=image,push=false" \
-            --tag enros/ubi-quarkus-native-image:${{ matrix.graalvm }}-java11 \
+            --tag enros/ubi-quarkus-native-image:${{ matrix.graalvm }}-${{ matrix.java }} \
             --file ./docker_builds/ubi-quarkus-native-image/Dockerfile \
             ./docker_builds/ubi-quarkus-native-image/
       -        
@@ -57,14 +59,15 @@ jobs:
             --cache-from "type=local,src=/tmp/.buildx-cache" \
             --platform linux/amd64,linux/arm64 \
             --build-arg GRAALVM_VERSION=${{ matrix.graalvm }} \
+            --build-arg JAVA_VERSION=${{ matrix.java }} \
             --output "type=image,push=true" \
-            --tag enros/ubi-quarkus-native-image:${{ matrix.graalvm }}-java11 \
+            --tag enros/ubi-quarkus-native-image:${{ matrix.graalvm }}-${{ matrix.java }} \
             --file ./docker_builds/ubi-quarkus-native-image/Dockerfile \
             ./docker_builds/ubi-quarkus-native-image/
       -
         name: Docker Check Manifest
         run: |
-          docker run --rm mplatform/mquery enros/ubi-quarkus-native-image:${{ matrix.graalvm }}-java11
+          docker run --rm mplatform/mquery enros/ubi-quarkus-native-image:${{ matrix.graalvm }}-${{ matrix.java }}
       -
         name: Clear
         if: always()
