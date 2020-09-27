@@ -1,17 +1,17 @@
-name: csi-attacher
+name: csi-external-attacher
 
 on:
   push:
     paths:
-      - '.github/workflows/csi-attacher.yml'
-      - 'docker_builds/csi-attacher/**'
-      - '!docker_builds/csi-attacher/*.md'
+      - '.github/workflows/csi-external-attacher.yml'
+      - 'docker_builds/csi-external-attacher/**'
+      - '!docker_builds/csi-external-attacher/*.md'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      VERSION: $(cat docker_builds/csi-attacher/.version)
+      VERSION: $(cat docker_builds/csi-external-attacher/.version)
     steps:
       - 
         name: Checkout
@@ -38,9 +38,9 @@ jobs:
             --cache-to "type=local,dest=/tmp/.buildx-cache" \
             --platform linux/amd64,linux/arm/v7,linux/arm64 \
             --output "type=image,push=false" \
-            --tag enros/csi-attacher:latest \
-            --file ./docker_builds/csi-attacher/Dockerfile \
-            ./docker_builds/csi-attacher/
+            --tag enros/csi-external-attacher:latest \
+            --file ./docker_builds/csi-external-attacher/Dockerfile \
+            ./docker_builds/csi-external-attacher/
       -        
         name: Login to GitHub Docker Registry
         env:
@@ -55,13 +55,13 @@ jobs:
             --cache-from "type=local,src=/tmp/.buildx-cache" \
             --platform linux/amd64,linux/arm/v7,linux/arm64 \
             --output "type=image,push=true" \
-            --tag enros/csi-attacher:latest \
-            --file ./docker_builds/csi-attacher/Dockerfile \
-            ./docker_builds/csi-attacher/
+            --tag enros/csi-external-attacher:latest \
+            --file ./docker_builds/csi-external-attacher/Dockerfile \
+            ./docker_builds/csi-external-attacher/
       -
         name: Docker Check Manifest
         run: |
-          docker run --rm mplatform/mquery enros/csi-attacher:latest
+          docker run --rm mplatform/mquery enros/csi-external-attacher:latest
       -
         name: Clear
         if: always()
