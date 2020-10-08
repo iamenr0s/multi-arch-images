@@ -30,7 +30,7 @@ jobs:
         id: cache
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${matrix.keycloak-version}-${{ github.sha }}
+          key: ${{ runner.os }}-buildx-${{ matrix.keycloak-version }}-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
       - 
@@ -41,7 +41,7 @@ jobs:
             --cache-to "type=local,dest=/tmp/.buildx-cache" \
             --platform linux/amd64,linux/arm64 \
             --output "type=image,push=false" \
-            --build-arg KEYCLOAK_VERSION=${matrix.keycloak-version} \
+            --build-arg KEYCLOAK_VERSION=${{ matrix.keycloak-version }} \
             --tag enros/keycloak:${matrix.keycloak-version} \
             --file ./docker_builds/keycloak/Dockerfile \
             ./docker_builds/keycloak/
@@ -59,14 +59,14 @@ jobs:
             --cache-from "type=local,src=/tmp/.buildx-cache" \
             --platform linux/amd64,linux/arm64 \
             --output "type=image,push=true" \
-            --build-arg KEYCLOAK_VERSION=${matrix.keycloak-version} \
+            --build-arg KEYCLOAK_VERSION=${{ matrix.keycloak-version }} \
             --tag enros/keycloak:${matrix.keycloak-version} \
             --file ./docker_builds/keycloak/Dockerfile \
             ./docker_builds/keycloak/
       -
         name: Docker Check Manifest
         run: |
-          docker run --rm mplatform/mquery enros/keycloak:${matrix.keycloak-version}
+          docker run --rm mplatform/mquery enros/keycloak:${{ matrix.keycloak-version }}
       -
         name: Clear
         if: always()
