@@ -42,7 +42,7 @@ jobs:
             --platform linux/amd64,linux/arm64 \
             --output "type=image,push=false" \
             --build-arg KEYCLOAK_VERSION=${{ matrix.keycloak-version }} \
-            --tag enros/keycloak:${matrix.keycloak-version} \
+            --tag enros/keycloak:${{ matrix.keycloak-version }} \
             --file ./docker_builds/keycloak/Dockerfile \
             ./docker_builds/keycloak/
       -        
@@ -60,7 +60,7 @@ jobs:
             --platform linux/amd64,linux/arm64 \
             --output "type=image,push=true" \
             --build-arg KEYCLOAK_VERSION=${{ matrix.keycloak-version }} \
-            --tag enros/keycloak:${matrix.keycloak-version} \
+            --tag enros/keycloak:${{ matrix.keycloak-version }} \
             --file ./docker_builds/keycloak/Dockerfile \
             ./docker_builds/keycloak/
       -
