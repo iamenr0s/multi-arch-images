@@ -41,7 +41,7 @@ jobs:
             --cache-to "type=local,dest=/tmp/.buildx-cache" \
             --platform linux/amd64,linux/arm64 \
             --output "type=image,push=false" \
-            --build-arg PGBOUNVER_VERSION=${{ matrix.pgbouncer-version }} \
+            --build-arg PGBOUNCER_VERSION=${{ matrix.pgbouncer-version }} \
             --tag enros/pgbouncer:${{ matrix.pgbouncer-version }} \
             --file ./docker_builds/pgbouncer/Dockerfile \
             ./docker_builds/pgbouncer/
@@ -59,7 +59,7 @@ jobs:
             --cache-from "type=local,src=/tmp/.buildx-cache" \
             --platform linux/amd64,linux/arm64 \
             --output "type=image,push=true" \
-            --build-arg PGBOUNVER_VERSION=${{ matrix.pgbouncer-version }} \
+            --build-arg PGBOUNCER_VERSION=${{ matrix.pgbouncer-version }} \
             --tag enros/pgbouncer:${{ matrix.pgbouncer-version }} \
             --file ./docker_builds/pgbouncer/Dockerfile \
             ./docker_builds/pgbouncer/
