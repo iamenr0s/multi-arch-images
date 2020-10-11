@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        pgbouncer-version: [ 1.14.0 ]
+        pgbouncer-version: [ 1.14.0,1.13.0 ]
     env:
       VERSION: $(cat docker_builds/pgbouncer/.version)
     steps:
