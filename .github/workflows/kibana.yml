@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        kibana-version: [ 7.9.3, 7.9.2 ]
+        kibana-version: [ 7.9.3 ]
     env:
       VERSION: $(cat docker_builds/kibana/.version)
     steps:
