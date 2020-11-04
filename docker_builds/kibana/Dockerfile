@@ -10,7 +10,7 @@ WORKDIR /usr/share/kibana
 
 RUN curl -sL https://artifacts.elastic.co/downloads/kibana/kibana-oss-${KIBANA_VERSION}-linux-`uname -m`.tar.gz | tar --strip-components=1 -zxf -
 RUN rm -rf /usr/share/kibana/node/* && \
-    curl -sL https://nodejs.org/dist/v10.19.0/node-v10.19.0-linux-`uname -m|sed 's|x86_64|amd64|'|sed 's|aarch64|arm64|'`.tar.gz | tar -C /usr/share/kibana/node/ --strip-components=1 -xzf -
+    curl -sL https://nodejs.org/dist/v10.19.0/node-v10.19.0-linux-`uname -m|sed 's|x86_64|x64|'|sed 's|aarch64|arm64|'`.tar.gz | tar -C /usr/share/kibana/node/ --strip-components=1 -xzf -
 
 # compile dumb-init from sources
 RUN mkdir -p /opt/dumb-init
