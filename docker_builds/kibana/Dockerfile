@@ -1,6 +1,7 @@
 FROM centos:7 AS prep_files
 
 ARG KIBANA_VERSION=7.9.3
+ARG NODEJS_VERSION=v10.22.1
 
 # Install toolchain to build dumb-init
 RUN yum install -y glibc-static gcc make
@@ -10,7 +11,7 @@ WORKDIR /usr/share/kibana
 
 RUN curl -sL https://artifacts.elastic.co/downloads/kibana/kibana-oss-${KIBANA_VERSION}-linux-`uname -m`.tar.gz | tar --strip-components=1 -zxf -
 RUN rm -rf /usr/share/kibana/node/* && \
-    curl -sL https://nodejs.org/dist/v10.19.0/node-v10.19.0-linux-`uname -m|sed 's|x86_64|x64|'|sed 's|aarch64|arm64|'`.tar.gz | tar -C /usr/share/kibana/node/ --strip-components=1 -xzf -
+    curl -sL https://nodejs.org/dist/${NODEJS_VERSION}/node-${NODEJS_VERSION}-linux-`uname -m|sed 's|x86_64|x64|'|sed 's|aarch64|arm64|'`.tar.gz | tar -C /usr/share/kibana/node/ --strip-components=1 -xzf -
 
 # compile dumb-init from sources
 RUN mkdir -p /opt/dumb-init
