@@ -1,4 +1,4 @@
-FROM golang:1.15 AS builder
+FROM golang:1.16 AS builder
 ARG VERSION=v1.3.0
 ARG TARGETPLATFORM
 WORKDIR /go/src/github.com/kubernetes-csi/node-driver-registrar/
