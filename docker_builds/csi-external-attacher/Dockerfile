@@ -5,6 +5,6 @@ WORKDIR /go/src/github.com/kubernetes-csi/external-attacher/
 RUN git clone --depth 1 -b "${VERSION}" https://github.com/kubernetes-csi/external-attacher.git . \
      && GOARCH=$(echo $TARGETPLATFORM | cut -f2 -d '/') make build
 
-FROM gcr.io/distroless/static@sha256:23aa732bba4c8618c0d97c26a72a32997363d591807b0d4c31b0bbc8a774bddf
+FROM gcr.io/distroless/static@sha256:1061399c202961ab567994c1bd42327bccd6380a345dcf88bf9ad7d5c8e29571
 COPY --from=builder /go/src/github.com/kubernetes-csi/external-attacher/bin/csi-attacher csi-attacher
 ENTRYPOINT ["/csi-attacher"]
