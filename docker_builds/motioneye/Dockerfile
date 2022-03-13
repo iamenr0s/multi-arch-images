@@ -24,6 +24,7 @@ RUN echo "deb http://snapshot.debian.org/archive/debian/$(date +%Y%m%d) buster c
       python-tz \
       python-wheel \
       v4l-utils \
+      git \
       motion \
       default-libmysqlclient-dev && \
     # Change uid/gid of user/group motion to match our desired IDs.  This will
