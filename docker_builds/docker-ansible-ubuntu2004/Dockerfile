@@ -21,7 +21,7 @@ RUN apt-get update \
     && apt-get clean
 RUN sed -i 's/^\($ModLoad imklog\)/#\1/' /etc/rsyslog.conf
 RUN locale-gen en_GB.UTF-8
-RUN pip3 install ${PIP_PACKAGES}
+RUN pip3 install --upgrade pip3 && pip3 install ${PIP_PACKAGES}
 RUN mkdir -p /etc/ansible
 RUN echo "[local]\nlocalhost ansible_connection=local" > /etc/ansible/hosts
 RUN rm -f /lib/systemd/system/systemd*udev* && rm -f /lib/systemd/system/getty.target
