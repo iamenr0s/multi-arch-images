@@ -7,6 +7,7 @@ ENV PIP_PACKAGES "ansible==2.9.9"
 ENV DEBIAN_FRONTEND "noninteractive"
 
 RUN apt-get update \
+    && apt-get upgrade -y \
     && apt-get install -y \
        apt-utils \
        locales \
