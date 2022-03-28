@@ -3,7 +3,7 @@ FROM ubuntu:20.04
 LABEL maintainer="enr0s"
 
 ENV ANSIBLE_DOCKER_VERSION 0.1.0
-ENV PIP_PACKAGES "ansible"
+ENV PIP_PACKAGES "ansible==2.9.9"
 ENV DEBIAN_FRONTEND "noninteractive"
 
 RUN apt-get update \
