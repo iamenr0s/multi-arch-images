@@ -5,6 +5,7 @@ LABEL maintainer="enr0s"
 ENV ANSIBLE_DOCKER_VERSION 0.1.0
 ENV PIP_PACKAGES "ansible==2.9.9"
 ENV DEBIAN_FRONTEND "noninteractive"
+ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
 
 RUN apt-get update \
     && apt-get upgrade -y \
