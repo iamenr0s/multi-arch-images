@@ -15,7 +15,7 @@ RUN apt-get update \
        build-essential \
        python3-setuptools \
        python3-pip \
-       libssl-dev libffi-dev python3-dev \
+       libssl-dev libffi-dev python3-dev cargo\
        software-properties-common \
        rsyslog systemd systemd-cron sudo iproute2 \
     && rm -Rf /var/lib/apt/lists/* \
@@ -23,7 +23,7 @@ RUN apt-get update \
     && apt-get clean
 RUN sed -i 's/^\($ModLoad imklog\)/#\1/' /etc/rsyslog.conf
 RUN locale-gen en_GB.UTF-8
-RUN pip install --upgrade pip setuptools wheel && pip install ${PIP_PACKAGES}
+RUN python -m pip install --upgrade pip setuptools wheel && pip install ${PIP_PACKAGES}
 RUN mkdir -p /etc/ansible
 RUN echo "[local]\nlocalhost ansible_connection=local" > /etc/ansible/hosts
 RUN rm -f /lib/systemd/system/systemd*udev* && rm -f /lib/systemd/system/getty.target
