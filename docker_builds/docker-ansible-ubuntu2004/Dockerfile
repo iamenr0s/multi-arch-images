@@ -2,10 +2,8 @@ FROM ubuntu:20.04
 
 LABEL maintainer="enr0s"
 
-ENV ANSIBLE_DOCKER_VERSION 0.1.0
 ENV PIP_PACKAGES "ansible"
 ENV DEBIAN_FRONTEND "noninteractive"
-ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -34,4 +32,3 @@ RUN rm -f /lib/systemd/system/systemd*udev* && rm -f /lib/systemd/system/getty.t
 
 VOLUME ["/sys/fs/cgroup", "/tmp", "/run"]
 CMD ["/lib/systemd/systemd"]
-
