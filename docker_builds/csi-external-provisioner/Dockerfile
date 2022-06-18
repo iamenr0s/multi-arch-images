@@ -5,7 +5,7 @@ WORKDIR /go/src/github.com/kubernetes-csi/external-provisioner/
 RUN git clone --depth 1 -b "${VERSION}" https://github.com/kubernetes-csi/external-provisioner.git . \
      && GOARCH=$(echo $TARGETPLATFORM | cut -f2 -d '/') make build
 
-FROM gcr.io/distroless/static@sha256:23aa732bba4c8618c0d97c26a72a32997363d591807b0d4c31b0bbc8a774bddf
+FROM gcr.io/distroless/static@sha256:2ad95019a0cbf07e0f917134f97dd859aaccc09258eb94edcb91674b3c1f448f
 WORKDIR /
 COPY --from=builder /go/src/github.com/kubernetes-csi/external-provisioner/bin/csi-provisioner csi-provisioner
 ENTRYPOINT ["/csi-node-driver-registrar"]
