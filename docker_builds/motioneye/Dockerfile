@@ -13,7 +13,7 @@ RUN case "$(dpkg --print-architecture)" in \
     esac && \
     apt-get -q update && \
     DEBIAN_FRONTEND="noninteractive" apt-get -qq --option Dpkg::Options::="--force-confnew" --no-install-recommends install \
-      ca-certificates curl python3 fdisk $PACKAGES && \
+      ca-certificates curl python3 fdisk git $PACKAGES && \
     git clone -b dev https://github.com/motioneye-project/motioneye.git /tmp/motioneye && \
     curl -sSfO 'https://bootstrap.pypa.io/get-pip.py' && \
     python3 get-pip.py && \
