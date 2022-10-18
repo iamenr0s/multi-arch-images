@@ -2,7 +2,7 @@ FROM ubuntu:20.04
 
 LABEL maintainer="enr0s"
 
-ENV PIP_PACKAGES " cryptography==2.9.2 ansible"
+ENV PIP_PACKAGES "cryptography==2.9.2 ansible"
 ENV DEBIAN_FRONTEND "noninteractive"
 
 RUN apt-get update \
