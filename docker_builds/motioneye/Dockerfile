@@ -5,7 +5,7 @@ ARG VCS_REF
 ARG RUN_UID=0
 ARG RUN_GID=0
 
-COPY docker_builds/motioneye/entrypoint.sh /entrypoint.sh
+COPY ./entrypoint.sh /entrypoint.sh
 
 RUN case "$(dpkg --print-architecture)" in \
       'armhf') PACKAGES='python3-distutils'; printf '%b' '[global]\nextra-index-url=https://www.piwheels.org/simple/\n' > /etc/pip.conf;; \
