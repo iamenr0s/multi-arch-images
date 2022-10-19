@@ -1,0 +1,69 @@
+name: baseimage
+
+on:
+  push:
+    paths:
+      - '.github/workflows/baseimage.yml'
+      - 'docker_builds/baseimage/**'
+      - '!docker_builds/baseimage/*.md'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      VERSION: $(cat docker_builds/baseimage/.version)
+    steps:
+      - 
+        name: Checkout
+        uses: actions/checkout@v2
+      - 
+        name: Set up Docker Buildx
+        uses: crazy-max/ghaction-docker-buildx@v3
+        with:
+          buildx-version: latest
+      -
+        name: Cache Docker layers
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+      - 
+        name: Docker Buildx (build)
+        run: |
+          docker buildx build \
+            --cache-from "type=local,src=/tmp/.buildx-cache" \
+            --cache-to "type=local,dest=/tmp/.buildx-cache" \
+            --platform linux/amd64,linux/arm/v7,linux/arm64 \
+            --output "type=image,push=false" \
+            --tag enros/baseimage:latest \
+            --file ./docker_builds/baseimage/Dockerfile \
+            ./docker_builds/baseimage/
+      -        
+        name: Login to GitHub Docker Registry
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}        
+        run: |
+          echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+      -  
+        name: Docker Buildx (push)
+        run: |
+          docker buildx build \
+            --cache-from "type=local,src=/tmp/.buildx-cache" \
+            --platform linux/amd64,linux/arm/v7,linux/arm64 \
+            --output "type=image,push=true" \
+            --tag enros/baseimage:latest \
+            --file ./docker_builds/baseimage/Dockerfile \
+            ./docker_builds/baseimage/
+      -
+        name: Docker Check Manifest
+        run: |
+          docker run --rm mplatform/mquery enros/baseimage:latest
+      -
+        name: Clear
+        if: always()
+        run: |
+          rm -f ${HOME}/.docker/config.json
