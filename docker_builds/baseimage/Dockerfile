@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=ubuntu:22.04
+ARG BASE_IMAGE=debian:bullseye-slim
 FROM $BASE_IMAGE
 
 ARG QEMU_ARCH
