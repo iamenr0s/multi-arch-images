@@ -4,6 +4,7 @@
 
 | Name | Docker Image | Architecture |
 |------|--------------|--------------|
+|![baseimage](https://github.com/enr0s/multi-arch-images/workflows/baseimage/badge.svg)|![Docker Pulls](https://img.shields.io/docker/pulls/enros/baseimage)|amd64,arm/v7,arm64|
 |![csi-external-attacher](https://github.com/enr0s/multi-arch-images/workflows/csi-external-attacher/badge.svg)|![Docker Pulls](https://img.shields.io/docker/pulls/enros/csi-external-attacher)|amd64,arm/v7,arm64|
 |![csi-external-provisioner](https://github.com/enr0s/multi-arch-images/workflows/csi-external-provisioner/badge.svg)|![Docker Pulls](https://img.shields.io/docker/pulls/enros/csi-external-provisioner)|amd64,arm/v7,arm64|
 |![csi-node-driver-registrar](https://github.com/enr0s/multi-arch-images/workflows/csi-node-driver-registrar/badge.svg)|![Docker Pulls](https://img.shields.io/docker/pulls/enros/csi-node-driver-registrar)|amd64,arm/v7,arm64|
