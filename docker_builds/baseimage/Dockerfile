@@ -4,6 +4,8 @@ FROM $BASE_IMAGE
 ARG QEMU_ARCH
 #ADD x86_64_qemu-${QEMU_ARCH}-static.tar.gz /usr/bin
 
+RUN mkdir /bd_build
+
 COPY . /bd_build
 
 RUN chmod +x /bd_build/*.sh && /bd_build/prepare.sh && \
