@@ -4,7 +4,7 @@ FROM $BASE_IMAGE
 ARG QEMU_ARCH
 #ADD x86_64_qemu-${QEMU_ARCH}-static.tar.gz /usr/bin
 
-COPY . /bd_build
+COPY ./docker_builds/baseimage/* /bd_build
 
 RUN /bd_build/prepare.sh && \
 	/bd_build/system_services.sh && \
