@@ -7,7 +7,7 @@ ARG NODEJS_VERSION=v10.22.1
 RUN cd /etc/yum.repos.d/ && \
     sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* && \
     sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* && \
-    dnf install -y glibc-static gcc make
+    dnf install -y gcc make
 
 RUN mkdir /usr/share/kibana
 WORKDIR /usr/share/kibana
