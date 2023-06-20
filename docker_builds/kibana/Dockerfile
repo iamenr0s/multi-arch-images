@@ -1,6 +1,6 @@
 FROM centos:8 AS prep_files
 
-ARG KIBANA_VERSION=7.9.3
+ARG KIBANA_VERSION=8.8.1
 ARG NODEJS_VERSION=v10.22.1
 
 # Install toolchain to build dumb-init
