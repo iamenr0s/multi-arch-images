@@ -1,4 +1,4 @@
-FROM golang:1.15 AS builder
+FROM golang:1.21 AS builder
 ARG VERSION=v1.2.0
 ARG TARGETPLATFORM
 WORKDIR /go/src/github.com/kubernetes-csi/external-attacher/
