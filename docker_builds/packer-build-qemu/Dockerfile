@@ -1,7 +1,7 @@
 # syntax = docker/dockerfile:experimental
 FROM alpine:latest
 
-MAINTAINER enr0s
+MAINTAINER iamenr0s
 
 ENV PACKER_VERSION=1.6.0
 

@@ -1,5 +1,5 @@
 FROM alpine:3.19
-LABEL maintainer="iamenr0s"
+LABEL maintainer="iamiamenr0s"
 
 ARG BUILD_DATE
 LABEL build_date=$BUILD_DATE
