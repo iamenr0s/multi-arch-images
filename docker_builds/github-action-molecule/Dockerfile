@@ -32,4 +32,4 @@ ENV PATH=/opt/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/
 
 COPY cmd.sh /cmd.sh
 
-CMD ["/bin/sh" "-c" "/cmd.sh"]
+CMD ["/bin/sh" "/cmd.sh"]
