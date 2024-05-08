@@ -61,7 +61,7 @@ jobs:
       -
         name: Docker Check Manifest
         run: |
-          docker run --rm mplatform/mquery iamenr0s/github-action-molecule:latest
+          docker run --rm mplatform/mquery enros/github-action-molecule:latest
       -
         name: Clear
         if: always()
