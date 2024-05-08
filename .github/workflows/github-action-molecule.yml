@@ -1,0 +1,69 @@
+name: github-action-molecule
+
+on:
+  push:
+    paths:
+      - '.github/workflows/github-action-molecule.yml'
+      - 'docker_builds/github-action-molecule/**'
+      - '!docker_builds/github-action-molecule/*.md'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      VERSION: $(cat docker_builds/github-action-molecule/.version)
+    steps:
+      - 
+        name: Checkout
+        uses: actions/checkout@v2
+      - 
+        name: Set up Docker Buildx
+        uses: crazy-max/ghaction-docker-buildx@v3
+        with:
+          buildx-version: latest
+      -
+        name: Cache Docker layers
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+      - 
+        name: Docker Buildx (build)
+        run: |
+          docker buildx build \
+            --cache-from "type=local,src=/tmp/.buildx-cache" \
+            --cache-to "type=local,dest=/tmp/.buildx-cache" \
+            --platform linux/amd64,linux/arm/v7,linux/arm64/v8 \
+            --output "type=image,push=false" \
+            --tag iamenr0s/github-action-molecule:latest \
+            --file ./docker_builds/github-action-molecule/Dockerfile \
+            ./docker_builds/github-action-molecule/
+      -        
+        name: Login to GitHub Docker Registry
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}        
+        run: |
+          echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+      -  
+        name: Docker Buildx (push)
+        run: |
+          docker buildx build \
+            --cache-from "type=local,src=/tmp/.buildx-cache" \
+            --platform linux/amd64,linux/arm/v7,linux/arm64/v8 \
+            --output "type=image,push=true" \
+            --tag iamenr0s/bagithub-action-moleculeseimage:latest \
+            --file ./docker_builds/github-action-molecule/Dockerfile \
+            ./docker_builds/github-action-molecule/
+      -
+        name: Docker Check Manifest
+        run: |
+          docker run --rm mplatform/mquery iamenr0s/github-action-molecule:latest
+      -
+        name: Clear
+        if: always()
+        run: |
+          rm -f ${HOME}/.docker/config.json
