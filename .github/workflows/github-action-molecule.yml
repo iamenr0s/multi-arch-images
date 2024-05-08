@@ -36,7 +36,7 @@ jobs:
           docker buildx build \
             --cache-from "type=local,src=/tmp/.buildx-cache" \
             --cache-to "type=local,dest=/tmp/.buildx-cache" \
-            --platform linux/amd64,linux/arm/v7,linux/arm64/v8 \
+            --platform linux/amd64,linux/arm64/v8 \
             --output "type=image,push=false" \
             --tag iamenr0s/github-action-molecule:latest \
             --file ./docker_builds/github-action-molecule/Dockerfile \
@@ -53,7 +53,7 @@ jobs:
         run: |
           docker buildx build \
             --cache-from "type=local,src=/tmp/.buildx-cache" \
-            --platform linux/amd64,linux/arm/v7,linux/arm64/v8 \
+            --platform linux/amd64,linux/arm64/v8 \
             --output "type=image,push=true" \
             --tag iamenr0s/bagithub-action-moleculeseimage:latest \
             --file ./docker_builds/github-action-molecule/Dockerfile \
