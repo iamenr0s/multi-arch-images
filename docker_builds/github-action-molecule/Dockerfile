@@ -5,9 +5,7 @@ ARG BUILD_DATE
 LABEL build_date=$BUILD_DATE
 
 WORKDIR /github/workspace
-
 COPY requirements.txt .
-
 RUN apk add --no-cache \
     build-base \
     gcc \
@@ -27,9 +25,7 @@ RUN apk add --no-cache \
     /opt/venv/bin/pip3 install --no-cache-dir -r requirements.txt && \
     /opt/venv/bin/python -m pip cache purge
 
-
 ENV PATH=/opt/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-
 COPY cmd.sh /cmd.sh
-
-CMD ["/bin/sh" "/cmd.sh"]
+RUN chmod 777 /cmd.sh
+CMD ["/cmd.sh"]
