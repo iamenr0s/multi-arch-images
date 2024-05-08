@@ -21,10 +21,10 @@ RUN apk add --no-cache \
     py3-pip \
     py3-setuptools \
     py3-wheel \
-    podman &&
-    rm -rf /var/cache/apk/* &&   
-    python3 -m venv /opt/venv &&
-    /opt/venv/bin/pip3 install --no-cache-dir -r requirements.txt &&
+    podman && \
+    rm -rf /var/cache/apk/* && \  
+    python3 -m venv /opt/venv && \
+    /opt/venv/bin/pip3 install --no-cache-dir -r requirements.txt && \
     /opt/venv/bin/python -m pip cache purge
 
 
