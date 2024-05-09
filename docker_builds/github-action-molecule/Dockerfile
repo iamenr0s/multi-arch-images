@@ -7,8 +7,8 @@ LABEL build_date=$BUILD_DATE
 WORKDIR /github/workspace
 COPY requirements.txt .
 RUN dnf update -y && \
-    dnf group install "Development Tools" && \
-    dnf install python3-pip podman jq && \
+    dnf group install -y "Development Tools" && \
+    dnf install -y python3-pip podman jq && \
     python3 -m venv /opt/venv && \
     /opt/venv/bin/python3 -m pip install --upgrade pip && \
     /opt/venv/bin/pip3 install --no-cache-dir -r requirements.txt && \
