@@ -25,7 +25,8 @@ RUN apk add --no-cache \
     /opt/venv/bin/pip3 install --no-cache-dir -r requirements.txt && \
     /opt/venv/bin/python -m pip cache purge && \
     rm -rf /var/lib/containers/storage/* && \
-    sed -i 's/driver =.*/driver = "vfs"/' /etc/containers/storage.conf
+    sed -i 's/driver =.*/driver = "vfs"/' /etc/containers/storage.conf && \
+    mount --make-rshared /
 
 ENV PATH=/opt/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 COPY cmd.sh /cmd.sh
