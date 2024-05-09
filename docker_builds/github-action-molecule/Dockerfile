@@ -13,7 +13,8 @@ RUN dnf update -y && \
     /opt/venv/bin/python3 -m pip install --upgrade pip && \
     /opt/venv/bin/pip3 install --no-cache-dir -r requirements.txt && \
     /opt/venv/bin/python -m pip cache purge && \
-    sudo mount --make-rshared /
+    mount --make-rshared /
+
 
 ENV PATH=/opt/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 COPY cmd.sh /cmd.sh
