@@ -1,32 +1,18 @@
-FROM alpine:3.19
-LABEL maintainer="iamiamenr0s"
+FROM almalinux/9-base
+LABEL maintainer="iamenr0s"
 
 ARG BUILD_DATE
 LABEL build_date=$BUILD_DATE
 
 WORKDIR /github/workspace
 COPY requirements.txt .
-RUN apk add --no-cache \
-    build-base \
-    gcc \
-    curl \
-    git \
-    jq \
-    libffi-dev \
-    python3 \
-    python3-dev \
-    py3-jmespath \     
-    py3-pip \
-    py3-setuptools \
-    py3-wheel \
-    podman && \
-    rm -rf /var/cache/apk/* && \  
+RUN dnf update -y && \
+    dnf group install "Development Tools" && \
+    dnf install python3-pip podman jq && \
     python3 -m venv /opt/venv && \
+    /opt/venv/bin/python3 -m pip install --upgrade pip && \
     /opt/venv/bin/pip3 install --no-cache-dir -r requirements.txt && \
-    /opt/venv/bin/python -m pip cache purge && \
-    rm -rf /var/lib/containers/storage/* && \
-    sed -i 's/driver =.*/driver = "vfs"/' /etc/containers/storage.conf && \
-    mount --make-shared /
+    /opt/venv/bin/python -m pip cache purge
 
 ENV PATH=/opt/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 COPY cmd.sh /cmd.sh
