@@ -1,4 +1,4 @@
-FROM almalinux/9-base
+FROM python:3-slim
 LABEL maintainer="iamenr0s"
 
 ARG BUILD_DATE
@@ -6,15 +6,15 @@ LABEL build_date=$BUILD_DATE
 
 WORKDIR /github/workspace
 COPY requirements.txt .
-RUN dnf update -y && \
-    dnf group install -y "Development Tools" && \
-    dnf install -y python3-pip podman jq && \
-    python3 -m venv /opt/venv && \
+RUN python3 -m venv /opt/venv && \
     /opt/venv/bin/python3 -m pip install --upgrade pip && \
     /opt/venv/bin/pip3 install --no-cache-dir -r requirements.txt && \
     /opt/venv/bin/python -m pip cache purge && \
-    rm -rf /var/lib/containers/storage/* && \
-    sed -i 's/driver =.*/driver = "vfs"/' /etc/containers/storage.conf 
+    apt-get update && apt-get install -y wget gnupg jq curl git ca-certificates && \
+    echo 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_12/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list && \
+    wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/Debian_10/Release.key -O- |  apt-key add - && \
+    apt-get update && apt-get install -y podman && \
+    echo 'events_logger = "file"' > /etc/containers/libpod.conf
 
 ENV PATH=/opt/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 COPY cmd.sh /cmd.sh
