@@ -14,7 +14,9 @@ RUN apt-get update && apt-get install -y wget gnupg jq curl git ca-certificates 
     /opt/venv/bin/python3 -m pip install --upgrade pip && \
     /opt/venv/bin/pip3 install --no-cache-dir -r requirements.txt && \
     /opt/venv/bin/python -m pip cache purge && \
-    echo 'events_logger = "file"' > /etc/containers/libpod.conf
+    echo 'events_logger = "file"' > /etc/containers/libpod.conf && \
+    echo 'unqualified-search-registries = ["docker.io"]' >> /etc/containers/registries.conf && \
+    echo 'short-name-mode = "disabled"' >> /etc/containers/registries.conf
 
 COPY storage.conf /etc/containers/storage.conf
 ENV PATH=/opt/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
