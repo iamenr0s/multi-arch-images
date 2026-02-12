@@ -1,4 +1,4 @@
-FROM registry.fedoraproject.org/fedora:39
+FROM registry.fedoraproject.org/fedora:45
 LABEL maintainer="iamenr0s"
 
 ARG BUILD_DATE
