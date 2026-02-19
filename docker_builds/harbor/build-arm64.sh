@@ -63,6 +63,24 @@ fi
 exec podman "$@"
 EOS
   chmod +x "$SHIM_BIN"
+  COMPOSE_SHIM_BIN="$SHIM_DIR/docker-compose"
+  cat >"$COMPOSE_SHIM_BIN" <<'EOSC'
+#!/usr/bin/env bash
+set -e
+if [ "${1:-}" = "version" ]; then
+  echo "docker-compose version 1.29.2, build f000000"
+  exit 0
+fi
+if command -v podman >/dev/null 2>&1 && podman compose version >/dev/null 2>&1; then
+  exec podman compose "$@"
+fi
+if command -v podman-compose >/dev/null 2>&1; then
+  exec podman-compose "$@"
+fi
+echo "docker-compose not available; install podman compose or podman-compose" >&2
+exit 1
+EOSC
+  chmod +x "$COMPOSE_SHIM_BIN"
   export PATH="$SHIM_DIR:$PATH"
 fi
 
