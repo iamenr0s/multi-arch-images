@@ -13,6 +13,21 @@ PUSH=${PUSH:-false}
 REGISTRY_USERNAME=${REGISTRY_USERNAME:-}
 REGISTRY_PASSWORD=${REGISTRY_PASSWORD:-}
 
+# Container engine selection: docker or podman (auto-detect if not set)
+CONTAINER_ENGINE=${CONTAINER_ENGINE:-}
+if [ -z "${CONTAINER_ENGINE}" ]; then
+  if command -v podman >/dev/null 2>&1; then
+    CONTAINER_ENGINE=podman
+  else
+    CONTAINER_ENGINE=docker
+  fi
+fi
+
+if ! command -v "$CONTAINER_ENGINE" >/dev/null 2>&1; then
+  echo "Container engine '$CONTAINER_ENGINE' not found in PATH" >&2
+  exit 1
+fi
+
 ROOT_DIR=$(cd "$(dirname "$0")/.." && pwd)
 VENDOR_DIR="$ROOT_DIR/vendor"
 mkdir -p "$VENDOR_DIR"
@@ -24,10 +39,17 @@ fi
 cd "$VENDOR_DIR/harbor-arm"
 printf "%s" "$HARBOR_VERSION" > VERSION
 
-if ! docker buildx ls >/dev/null 2>&1; then
-  echo "Docker Buildx is required" >&2
-  exit 1
+# Buildx is only required when using Docker; Podman provides native build capabilities
+if [ "$CONTAINER_ENGINE" = "docker" ]; then
+  if ! docker buildx ls >/dev/null 2>&1; then
+    echo "Docker Buildx is required" >&2
+    exit 1
+  fi
 fi
+
+# Ensure upstream Makefiles use the selected container engine
+export DOCKER="$CONTAINER_ENGINE"
+export CONTAINER_ENGINE
 
 make download
 make compile_redis
@@ -39,4 +61,3 @@ make build GOBUILDTAGS="include_oss include_gcs" BUILDBIN=true NOTARYFLAG="$ENAB
 if [ "$PUSH" = "true" ] && [ -n "$REGISTRY" ] && [ -n "$NAMESPACE" ] && [ -n "$REGISTRY_USERNAME" ] && [ -n "$REGISTRY_PASSWORD" ]; then
   make pushimage -e DEVFLAG=false REGISTRYSERVER="${REGISTRY}/" REGISTRYUSER="$REGISTRY_USERNAME" REGISTRYPASSWORD="$REGISTRY_PASSWORD" REGISTRYPROJECTNAME="$NAMESPACE"
 fi
-

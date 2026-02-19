@@ -1,20 +1,27 @@
 # Harbor ARM64 Build
 
-This repository automates building Harbor container images for `linux/arm64` and optionally pushes them to a container registry. It wraps the official Harbor ARM tooling and runs end-to-end on GitHub Actions or a local machine with Docker Buildx.
+This repository automates building Harbor container images for `linux/arm64` and optionally pushes them to a container registry. It wraps the official Harbor ARM tooling and runs end-to-end on GitHub Actions or a local machine with Docker or Podman.
 
 ## Quick start
 
-- Local prerequisites: Docker 20+, Docker Buildx, Git, Make.
+- Local prerequisites: Docker 20+ with Buildx, or Podman 4+, plus Git and Make.
 - Default Harbor version: `v2.9.0`. Override via `HARBOR_VERSION`.
 
-Local build:
+Local build (auto-detects Podman when available):
 
 ```bash
 HARBOR_VERSION=v2.9.0 \
 ENABLE_NOTARY=true \
 ENABLE_TRIVY=true \
 ENABLE_CHARTS=true \
-./scripts/build-arm64.sh
+./docker_builds/harbor/build-arm64.sh
+```
+
+Use Podman explicitly by setting the engine:
+
+```bash
+CONTAINER_ENGINE=podman \
+./docker_builds/harbor/build-arm64.sh
 ```
 
 Push images after build:
@@ -26,7 +33,7 @@ NAMESPACE=your-org \
 REGISTRY_USERNAME=your-user \
 REGISTRY_PASSWORD=your-token \
 PUSH=true \
-./scripts/build-arm64.sh
+./docker_builds/harbor/build-arm64.sh
 ```
 
 ## GitHub Actions
