@@ -1,4 +1,4 @@
-FROM centos:7 AS prep_files
+FROM centos:8 AS prep_files
 
 ARG KIBANA_VERSION=7.9.3
 ARG NODEJS_VERSION=v10.22.1
@@ -25,7 +25,7 @@ RUN pushd /opt/dumb-init && make && popd
 RUN chmod -R g=u /usr/share/kibana
 RUN find /usr/share/kibana -type d -exec chmod g+s {} \;
 
-FROM centos:7
+FROM centos:8
 EXPOSE 5601
 
 # Add Reporting dependencies.
