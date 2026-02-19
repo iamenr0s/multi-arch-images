@@ -39,6 +39,33 @@ fi
 cd "$VENDOR_DIR/harbor-arm"
 printf "%s" "$HARBOR_VERSION" > VERSION
 
+# If using Podman, create a docker CLI shim to satisfy Harbor's docker version checks
+if [ "$CONTAINER_ENGINE" = "podman" ]; then
+  SHIM_DIR="$VENDOR_DIR/.docker-shim"
+  mkdir -p "$SHIM_DIR"
+  SHIM_BIN="$SHIM_DIR/docker"
+  cat >"$SHIM_BIN" <<'EOS'
+#!/usr/bin/env bash
+set -e
+# Emulate docker version output expected by Harbor's env check
+if [ "${1:-}" = "version" ]; then
+  if [ "${2:-}" = "--format" ]; then
+    echo "20.10.10"
+    exit 0
+  fi
+  echo "Docker version 20.10.10, build f000000"
+  exit 0
+fi
+if [ "${1:-}" = "--version" ]; then
+  echo "Docker version 20.10.10, build f000000"
+  exit 0
+fi
+exec podman "$@"
+EOS
+  chmod +x "$SHIM_BIN"
+  export PATH="$SHIM_DIR:$PATH"
+fi
+
 # Buildx is only required when using Docker; Podman provides native build capabilities
 if [ "$CONTAINER_ENGINE" = "docker" ]; then
   if ! docker buildx ls >/dev/null 2>&1; then
