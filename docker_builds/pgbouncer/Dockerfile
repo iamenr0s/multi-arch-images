@@ -1,4 +1,4 @@
-FROM alpine:3.11.6 AS build_stage
+FROM alpine:3.23.3 AS build_stage
 
 ARG PGBOUNCER_VERSION
 
@@ -15,7 +15,7 @@ RUN pip install docutils \
 WORKDIR /bin
 RUN ln -s ../usr/bin/rst2man.py rst2man
 
-FROM alpine:3.11.6
+FROM alpine:3.23.3
 
 RUN apk --update add libevent openssl c-ares
 WORKDIR /
